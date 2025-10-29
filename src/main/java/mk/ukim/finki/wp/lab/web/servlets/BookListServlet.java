@@ -28,7 +28,8 @@ public class BookListServlet extends HttpServlet {
         // Get search parameters
         String searchText = req.getParameter("searchText");
         String searchRatingStr = req.getParameter("searchRating");
-        
+        String deleteBook = req.getParameter("deleteBook");
+
         List<Book> books;
         
         // If search parameters are provided, use searchBooks, otherwise use listAll
@@ -49,10 +50,14 @@ public class BookListServlet extends HttpServlet {
             }
             
             books = bookService.searchBooks(text, rating);
+        } else if (deleteBook != null && !deleteBook.trim().isEmpty()) {
+            bookService.delete(deleteBook);
+            books = bookService.listAll();
         } else {
             books = bookService.listAll();
         }
-        
+
+
         // Create Thymeleaf context
         IWebExchange webExchange = JakartaServletWebApplication
                 .buildApplication(getServletContext())

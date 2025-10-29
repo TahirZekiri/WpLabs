@@ -26,4 +26,10 @@ public class InMemoryBookRepository implements BookRepository {
                 })
                 .toList();
     }
+
+    @Override
+    public void delete(String name) {
+        DataHolder.books.removeIf(c -> c.getTitle().equals(name));
+    }
+
 }

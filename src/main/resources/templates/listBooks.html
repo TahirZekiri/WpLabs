@@ -86,6 +86,7 @@
                     Genre: <span th:text="${book.genre}"></span>, 
                     Rating: <span th:text="${book.averageRating}"></span>
                 </label>
+                <a th:href="@{/(deleteBook=${book.title})}" style="margin-left: 10px;">DELETE</a>
             </div>
 
             <h2>Enter your information:</h2>
