@@ -16,15 +16,44 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorServiceImpl(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
-    
+
+    @Override
+    public List<Author> listAll() {
+        return authorRepository.findAll();
+    }
+
     @Override
     public List<Author> findAll() {
         return authorRepository.findAll();
     }
-    
+
     @Override
     public Optional<Author> findById(Long id) {
         return authorRepository.findById(id);
+    }
+
+
+    @Override
+    public Author save(Long authorId, String name, String surname, String country, String biography) {
+        Author author = new Author(authorId, name, surname, country, biography);
+
+        return authorRepository.save(author);
+    }
+
+    @Override
+    public Author update(Long authorId, String name, String surname, String country, String biography) {
+        Author author = new Author(authorId, name, surname, country, biography);
+        return authorRepository.save(author);
+    }
+
+    @Override
+    public void delete(String name){
+        this.authorRepository.delete(name);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        this.authorRepository.deleteById(id);
     }
 }
 
