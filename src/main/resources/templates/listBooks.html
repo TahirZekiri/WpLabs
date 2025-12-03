@@ -61,12 +61,25 @@
         <div class="search-form">
             <h3>Search Books</h3>
             <form th:action="@{/books}" method="GET">
-                <label>Search by Title:</label>
-                <input type="text" name="searchText" th:value="${searchText}" placeholder="Enter book title...">
+                <label for="searchText">Search by Title:</label>
+                <input type="text" id="searchText" name="searchText" th:value="${searchText}" placeholder="Enter book title...">
 
-                <label>Filter by Minimum Rating:</label>
-                <input type="number" name="searchRating" th:value="${searchRating}"
-                       placeholder="0.0" step="0.1" min="0" max="10">
+                <label for="searchRating">Filter by Minimum Rating:</label>
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <input type="range"
+                           id="searchRating"
+                           name="searchRating"
+                           min="0" max="10" step="0.1"
+                           th:value="${searchRating != null && !#strings.isEmpty(searchRating) ? searchRating : 0}"
+                           oninput="document.getElementById('ratingValue').textContent = this.value || '0';">
+                    <span>Min rating: <strong id="ratingValue" th:text="${searchRating != null && !#strings.isEmpty(searchRating) ? searchRating : 0}">0</strong></span>
+                    <input type="number"
+                           aria-label="Minimum rating"
+                           style="width: 80px;"
+                           min="0" max="10" step="0.1"
+                           th:value="${searchRating}"
+                           oninput="document.getElementById('searchRating').value = this.value">
+                </div>
 
                 <input type="submit" value="Search">
                 <a th:href="@{/books}" style="margin-left: 10px;">Clear</a>
