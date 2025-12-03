@@ -59,6 +59,20 @@ public class BookController {
         return "listBooks";
     }
 
+    @GetMapping("/filter-rating")
+    public String filterByRating(@RequestParam String rating, Model model) {
+        Double ratingValue = null;
+        try {
+            ratingValue = Double.parseDouble(rating);
+        } catch (NumberFormatException e) {
+            return "redirect:/books?error=InvalidRating";
+        }
+        
+        List<Book> books = bookService.searchBooks("", ratingValue);
+        model.addAttribute("books", books);
+        return "listBooks";
+    }
+
     @GetMapping("/book-form")
     public String getAddBookPage(Model model) {
         model.addAttribute("authors", authorService.findAll());

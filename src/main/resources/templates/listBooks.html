@@ -49,99 +49,90 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to our Book Reservation App</h1>
-    </header>
-    <main>
-        <div th:if="${hasError}" class="error">
-            <span th:text="${error}"></span>
-        </div>
+<header>
+    <h1>Welcome to our Book Reservation App</h1>
+</header>
+<main>
+    <div th:if="${hasError}" class="error">
+        <span th:text="${error}"></span>
+    </div>
 
-        <!-- Search form -->
-        <div class="search-form">
-            <h3>Search Books</h3>
-            <form th:action="@{/books}" method="GET">
-                <label for="searchText">Search by Title:</label>
-                <input type="text" id="searchText" name="searchText" th:value="${searchText}" placeholder="Enter book title...">
+    <!-- Search form -->
+    <div class="search-form">
+        <h3>Search Books</h3>
+        <form th:action="@{/books}" method="GET">
+            <label>Search by Title:</label>
+            <input type="text" name="searchText" th:value="${searchText}" placeholder="Enter book title...">
 
-                <label for="searchRating">Filter by Minimum Rating:</label>
-                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                    <input type="range"
-                           id="searchRating"
-                           name="searchRating"
-                           min="0" max="10" step="0.1"
-                           th:value="${searchRating != null && !#strings.isEmpty(searchRating) ? searchRating : 0}"
-                           oninput="document.getElementById('ratingValue').textContent = this.value || '0';">
-                    <span>Min rating: <strong id="ratingValue" th:text="${searchRating != null && !#strings.isEmpty(searchRating) ? searchRating : 0}">0</strong></span>
-                    <input type="number"
-                           aria-label="Minimum rating"
-                           style="width: 80px;"
-                           min="0" max="10" step="0.1"
-                           th:value="${searchRating}"
-                           oninput="document.getElementById('searchRating').value = this.value">
-                </div>
+            <label>Minimum Rating:</label>
+            <input type="number" name="searchRating" th:value="${searchRating}"
+                   placeholder="0.0" step="0.1" min="0" max="10">
 
-                <input type="submit" value="Search">
-                <a th:href="@{/books}" style="margin-left: 10px;">Clear</a>
-            </form>
-        </div>
-
-        <!-- Add new book button -->
-        <a th:href="@{/books/book-form}" class="btn btn-add">Add New Book</a>
-        <hr>
-        <a th:href="@{/authors/author-form}" class="btn btn-add">Add New Author</a>
-
-
-        <form th:action="@{/bookReservation}" method="POST">
-            <h2>Choose a book:</h2>
-            <!-- Display radio buttons for each book,
-                 the value should be the book title 
-                 and the displayed text should be:
-                 Title: <book_title>, Genre: <book_genre>, Rating: <average_rating> -->
-            <div th:each="book, bookStat : ${books}" class="book-option">
-                <div class="book-info">
-                    <input type="radio"
-                           name="bookId"
-                           th:value="${book.id}"
-                           th:id="${'book_' + bookStat.index}"
-                           required>
-                    <label th:for="${'book_' + bookStat.index}">
-                        ID: <span th:text="${book.id}"></span>,
-                        Title: <span th:text="${book.title}"></span>,
-                        Genre: <span th:text="${book.genre}"></span>,
-                        Rating: <span th:text="${book.averageRating}"></span>,
-                        Author: <span th:text="${book.author.name + ' ' + book.author.surname}"></span>
-                    </label>
-                </div>
-                <div class="book-actions">
-                    <a th:href="@{/books/book-form/{id}(id=${book.id})}" class="btn btn-edit">Edit</a>
-                    <button type="button" class="btn btn-delete" th:onclick="'deleteBook(' + ${book.id} + ')'">Delete</button>
-                </div>
-            </div>
-
-            <h2>Enter your information:</h2>
-            <label>Your Name:</label>
-            <input type="text" name="readerName" required><br/>
-            <label>Your Address:</label>
-            <input type="text" name="readerAddress" required><br/>
-
-            <h2>Choose number of copies:</h2>
-            <input type="number" name="numCopies" min="1" max="10" required><br/>
-            <br/>
-            <input type="submit" value="Reserve Book" class="btn btn-add">
+            <input type="submit" value="Search">
+            <a th:href="@{/books}" style="margin-left: 10px;">Clear</a>
         </form>
-    </main>
-    <script>
-        function deleteBook(bookId) {
-            if (confirm('Are you sure you want to delete this book?')) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/books/delete/' + bookId;
-                document.body.appendChild(form);
-                form.submit();
-            }
+    </div>
+
+    <div class="rating-filter">
+        <h3>Filter by Rating:</h3>
+        <form th:action="@{/books/filter-rating}" method="GET">
+            <input type="text" name="rating" placeholder="Input rating:">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+
+    <!-- Add new book button -->
+    <a th:href="@{/books/book-form}" class="btn btn-add">Add New Book</a>
+
+    <form th:action="@{/bookReservation}" method="POST">
+        <h2>Choose a book:</h2>
+        <!-- Display radio buttons for each book,
+             the value should be the book title
+             and the displayed text should be:
+             Title: <book_title>, Genre: <book_genre>, Rating: <average_rating> -->
+        <div th:each="book : ${books}" class="book-option">
+            <div class="book-info">
+                <input type="radio"
+                       name="bookTitle"
+                       th:value="${book.title}"
+                       th:id="${'book_' + bookStat.index}"
+                       required>
+                <label th:for="${'book_' + bookStat.index}">
+                    ID: <span th:text="${book.id}"></span>,
+                    Title: <span th:text="${book.title}"></span>,
+                    Genre: <span th:text="${book.genre}"></span>,
+                    Rating: <span th:text="${book.averageRating}"></span>,
+                    Author: <span th:text="${book.author.name + ' ' + book.author.surname}"></span>
+                </label>
+            </div>
+            <div class="book-actions">
+                <a th:href="@{/books/book-form/{id}(id=${book.id})}" class="btn btn-edit">Edit</a>
+                <button type="button" class="btn btn-delete" th:onclick="'deleteBook(' + ${book.id} + ')'">Delete</button>
+            </div>
+        </div>
+
+        <h2>Enter your information:</h2>
+        <label>Your Name:</label>
+        <input type="text" name="readerName" required><br/>
+        <label>Your Address:</label>
+        <input type="text" name="readerAddress" required><br/>
+
+        <h2>Choose number of copies:</h2>
+        <input type="number" name="numCopies" min="1" max="10" required><br/>
+        <br/>
+        <input type="submit" value="Reserve Book" class="btn btn-add">
+    </form>
+</main>
+<script>
+    function deleteBook(bookId) {
+        if (confirm('Are you sure you want to delete this book?')) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/books/delete/' + bookId;
+            document.body.appendChild(form);
+            form.submit();
         }
-    </script>
+    }
+</script>
 </body>
 </html>
-
