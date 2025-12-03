@@ -20,7 +20,7 @@ public class BookReservationController {
     }
 
     @PostMapping
-    public String createReservation(@RequestParam String bookTitle,
+    public String createReservation(@RequestParam Long bookId,
                                     @RequestParam String readerName,
                                     @RequestParam String readerAddress,
                                     @RequestParam int numCopies,
@@ -29,7 +29,7 @@ public class BookReservationController {
         String clientIpAddress = request.getRemoteAddr();
 
         BookReservation reservation = bookReservationService.placeReservation(
-                bookTitle,
+                bookId,
                 readerName,
                 readerAddress,
                 numCopies
@@ -41,4 +41,3 @@ public class BookReservationController {
         return "reservationConfirmation";
     }
 }
-
