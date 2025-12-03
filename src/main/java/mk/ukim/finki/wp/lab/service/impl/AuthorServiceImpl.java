@@ -35,25 +35,35 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author save(Long authorId, String name, String surname, String country, String biography) {
-        Author author = new Author(authorId, name, surname, country, biography);
-
+        Author author = new Author(name, surname, country, biography);
+        if (authorId != null) {
+            author.setId(authorId);
+        }
         return authorRepository.save(author);
     }
 
     @Override
     public Author update(Long authorId, String name, String surname, String country, String biography) {
-        Author author = new Author(authorId, name, surname, country, biography);
+        Author author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new RuntimeException("Author not found"));
+        author.setName(name);
+        author.setSurname(surname);
+        author.setCountry(country);
+        author.setBiography(biography);
         return authorRepository.save(author);
     }
 
     @Override
     public void delete(String name){
-        this.authorRepository.delete(name);
+        authorRepository.findAll().stream()
+                .filter(a -> a.getName().equals(name))
+                .findFirst()
+                .ifPresent(authorRepository::delete);
     }
 
     @Override
     public void deleteById(Long id) {
-        this.authorRepository.deleteById(id);
+        authorRepository.deleteById(id);
     }
 }
 
