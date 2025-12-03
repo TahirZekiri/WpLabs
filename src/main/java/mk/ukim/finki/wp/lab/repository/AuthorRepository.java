@@ -1,10 +1,16 @@
 package mk.ukim.finki.wp.lab.repository;
 
 import mk.ukim.finki.wp.lab.model.Author;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface AuthorRepository extends JpaRepository<Author, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface AuthorRepository {
+    List<Author> findAll();
+    Optional<Author> findById(Long id);
+
+    Author save(Author author);
+    void delete(String name);
+    void deleteById(Long id);
 }
 

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Author Form</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        .form-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .form-group input[type="submit"],
+        .btn-cancel {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .btn-cancel {
+            background-color: #999;
+        }
+        .btn-cancel:hover {
+            background-color: #777;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 th:text="${author != null ? 'Edit Author' : 'Add New Author'}">Author Form</h1>
+</header>
+<main>
+    <div class="form-container">
+        <form th:action="@{${author != null ? '/authors/edit/' + author.id : '/authors/add'}}" method="POST">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" th:value="${author != null ? author.name : ''}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="surname">Surname:</label>
+                <input type="text" id="surname" name="surname" th:value="${author != null ? author.surname : ''}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country" th:value="${author != null ? author.country : ''}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="biography">Biography:</label>
+                <input type="text" id="biography" name="biography" th:value="${author != null ? author.biography : ''}" required>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" th:value="${author != null ? 'Update Author' : 'Add Author'}">
+                <a th:href="@{/authors}" class="btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>
