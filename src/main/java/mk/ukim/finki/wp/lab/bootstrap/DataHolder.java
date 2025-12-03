@@ -3,6 +3,7 @@ package mk.ukim.finki.wp.lab.bootstrap;
 import jakarta.annotation.PostConstruct;
 import mk.ukim.finki.wp.lab.model.Author;
 import mk.ukim.finki.wp.lab.model.Book;
+import mk.ukim.finki.wp.lab.model.BookReservation;
 import mk.ukim.finki.wp.lab.repository.AuthorRepository;
 import mk.ukim.finki.wp.lab.repository.BookRepository;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.util.List;
 public class DataHolder {
     public static List<Book> books = new ArrayList<>();
     public static List<Author> authors = new ArrayList<>();
+    public static List<BookReservation> reservations = new ArrayList<>();
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;

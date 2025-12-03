@@ -25,7 +25,12 @@ public class BookServiceImpl implements BookService {
     public List<Book> listAll() {
         return bookRepository.findAll();
     }
-    
+
+    @Override
+    public List<Book> listBooks() {
+        return listAll();
+    }
+
     @Override
     public List<Book> searchBooks(String text, Double rating) {
         return bookRepository.searchBooks(text, rating);
