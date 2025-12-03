@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-// Data initialization component
 @Component
 public class DataHolder {
     public static List<Book> books = new ArrayList<>();

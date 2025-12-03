@@ -10,4 +10,6 @@ public class WpLabsApplication {
         SpringApplication.run(WpLabsApplication.class, args);
     }
 
+    //http://localhost:8080/h2-console
+    //jdbc:h2:file:./data/booksdb
 }
