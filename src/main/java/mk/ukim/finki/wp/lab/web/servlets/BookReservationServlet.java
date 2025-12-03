@@ -24,37 +24,30 @@ public class BookReservationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Read data from the form
-        String bookTitle = req.getParameter("bookTitle");
+        Long bookId = Long.valueOf(req.getParameter("bookId"));
         String readerName = req.getParameter("readerName");
         String readerAddress = req.getParameter("readerAddress");
         int numCopies = Integer.parseInt(req.getParameter("numCopies"));
-        
-        // Get client IP address
+
         String clientIpAddress = req.getRemoteAddr();
-        
-        // Create reservation using the service
+
         BookReservation reservation = bookReservationService.placeReservation(
-                bookTitle, 
-                readerName, 
-                readerAddress, 
+                bookId,
+                readerName,
+                readerAddress,
                 numCopies
         );
-        
-        // Create Thymeleaf context
+
         IWebExchange webExchange = JakartaServletWebApplication
                 .buildApplication(getServletContext())
                 .buildExchange(req, resp);
-        
+
         WebContext context = new WebContext(webExchange);
         context.setVariable("reservation", reservation);
         context.setVariable("clientIpAddress", clientIpAddress);
-        
-        // Set response content type
+
         resp.setContentType("text/html");
-        
-        // Process the confirmation template
+
         springTemplateEngine.process("reservationConfirmation.html", context, resp.getWriter());
     }
 }
-
