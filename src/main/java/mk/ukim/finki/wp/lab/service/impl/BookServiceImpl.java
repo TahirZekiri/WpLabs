@@ -40,21 +40,29 @@ public class BookServiceImpl implements BookService {
     public Book save(String title, String genre, Double averageRating, Long authorId) {
         Author author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new RuntimeException("Author not found"));
-        Book book = new Book(null, title, genre, averageRating, author);
+        Book book = new Book(title, genre, averageRating, author);
         return bookRepository.save(book);
     }
 
     @Override
     public Book update(Long id, String title, String genre, Double averageRating, Long authorId) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
         Author author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new RuntimeException("Author not found"));
-        Book book = new Book(id, title, genre, averageRating, author);
+        book.setTitle(title);
+        book.setGenre(genre);
+        book.setAverageRating(averageRating);
+        book.setAuthor(author);
         return bookRepository.save(book);
     }
 
     @Override
     public void delete(String name){
-        this.bookRepository.delete(name);
+        bookRepository.delete(bookRepository.findAll().stream()
+                .filter(b -> b.getTitle().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Book not found")));
     }
 
     @Override
