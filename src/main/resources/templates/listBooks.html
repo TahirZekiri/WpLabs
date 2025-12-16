@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <title>Book Reservation - Welcome and choose a Book</title>
@@ -51,6 +51,15 @@
 <body>
 <header>
     <h1>Welcome to our Book Reservation App</h1>
+    <div sec:authorize="!isAuthenticated()">
+        <a th:href="@{/login}">Login</a>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <span>Logged in as: <span sec:authentication="name"></span></span>
+        <form th:action="@{/logout}" method="post" style="display: inline;">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
 </header>
 <main>
     <div th:if="${hasError}" class="error">
@@ -82,7 +91,9 @@
     </div>
 
     <!-- Add new book button -->
-    <a th:href="@{/books/book-form}" class="btn btn-add">Add New Book</a>
+    <div sec:authorize="isAuthenticated()">
+        <a th:href="@{/books/book-form}" class="btn btn-add">Add New Book</a>
+    </div>
 
     <form th:action="@{/bookReservation}" method="POST">
         <h2>Choose a book:</h2>
@@ -105,7 +116,7 @@
                     Author: <span th:text="${book.author.name + ' ' + book.author.surname}"></span>
                 </label>
             </div>
-            <div class="book-actions">
+            <div class="book-actions" sec:authorize="isAuthenticated()">
                 <a th:href="@{/books/book-form/{id}(id=${book.id})}" class="btn btn-edit">Edit</a>
                 <button type="button" class="btn btn-delete" th:onclick="'deleteBook(' + ${book.id} + ')'">Delete</button>
             </div>

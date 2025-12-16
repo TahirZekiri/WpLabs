@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="utf-8">
   <title>Authors List</title>
@@ -51,12 +51,23 @@
 <body>
 <header>
   <h1>Welcome to our Authors list</h1>
+  <div sec:authorize="!isAuthenticated()">
+    <a th:href="@{/login}">Login</a>
+  </div>
+  <div sec:authorize="isAuthenticated()">
+    <span>Logged in as: <span sec:authentication="name"></span></span>
+    <form th:action="@{/logout}" method="post" style="display: inline;">
+      <button type="submit">Logout</button>
+    </form>
+  </div>
 </header>
 <main>
   <div th:if="${hasError}" class="error">
     <span th:text="${error}"></span>
   </div>
-  <a th:href="@{/authors/author-form}" class="btn btn-add">Add New Author</a>
+  <div sec:authorize="isAuthenticated()">
+    <a th:href="@{/authors/author-form}" class="btn btn-add">Add New Author</a>
+  </div>
 
 
   <table>
@@ -76,8 +87,10 @@
       <td th:text="${author.country}"></td>
       <td th:text="${author.biography}"></td>
       <td>
-        <a th:href="@{/authors/author-form/{id}(id=${author.id})}">Edit</a>
-        <a th:href="@{/authors/delete/{id}(id=${author.id})}">Delete</a>
+        <span sec:authorize="isAuthenticated()">
+          <a th:href="@{/authors/author-form/{id}(id=${author.id})}">Edit</a>
+          <a th:href="@{/authors/delete/{id}(id=${author.id})}">Delete</a>
+        </span>
       </td>
     </tr>
     </tbody>
